@@ -6,9 +6,11 @@ var score;
 var survivalTime;
 
 function preload(){
-  monkey_running =            loadAnimation("sprite_0.png","sprite_1.png","sprite_2.png","sprite_3.png","sprite_4.png","sprite_5.png","sprite_6.png","sprite_7.png","sprite_8.png")
+  monkey_running =            loadAnimation("sprite_0.png","sprite_1.png","sprite_2.png","sprite_3.png","sprite_4.png","sprite_5.png","sprite_6.png","sprite_7.png","sprite_8.png");
   bananaImage = loadImage("banana.png");
   obstacleImage = loadImage("obstacle.png");
+  
+  monkey_dead = loadImage("sprite_7.png");
   
   BananaGroup = createGroup();
   ObstaclesGroup = createGroup();
@@ -42,23 +44,28 @@ function draw() {
   if(BananaGroup.collide(monkey)){
       BananaGroup.destroyEach();
       
-      survivalTime = survivalTime+10;}
-  
-  if(ObstaclesGroup.collide(monkey)){
-    ObstaclesGroup.velocityX = 0;
-    ObstaclesGroup.lifetime = -1;
-    
+      survivalTime = survivalTime + Math.round(random(4,10));
   }
   
-  stroke("black");
-  textSize(20);
-  fill("black");
-  text("Score: "+ score, 500,50);
+  if(ObstaclesGroup.collide(monkey)){
+    
+    ObstaclesGroup.velocityX = 0;
+    ObstaclesGroup.lifetime = -1;
+        
+    BananaGroup.destroyEach();
+    BananaGroup.velocityX = 0;
+    survivalTime = 0
+    
+    stroke("red");
+    textSize(30);
+    fill("red");
+    text("GAME OVER", 400,50);
+  }
+  
   
   stroke("black");
   textSize(20);
   fill("black");
-  survivalTime = Math.ceil(frameCount/frameRate())
   text("survival Time: "+ survivalTime, 100,50);
   
   drawSprites();
